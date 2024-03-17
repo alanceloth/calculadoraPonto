@@ -2,11 +2,13 @@ import streamlit as st
 import register_page
 import login_page
 import calculate_page
+from dba import create_database
 
 # Inicializando a variável username na sessão
 st.session_state.username = None
 
 def main():
+    create_database()
     st.sidebar.title("Navigation")
     selected_page = st.sidebar.radio("Go to", options=["Register", "Login", "Calculate"])
 
