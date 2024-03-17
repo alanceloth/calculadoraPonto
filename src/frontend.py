@@ -1,20 +1,30 @@
 import streamlit as st
-from backend import calculate_exit_time
+import register_page
+import login_page
+import calculate_page
 
-def run_frontend():
-    st.title("Work Time Calculator")
+# Inicializando a variável username na sessão
+st.session_state.username = None
 
-    st.text("Enter Time (HH:MM)")
-    enter_time = st.text_input(" ", value='09:00')
-    st.text("Lunch Time (HH:MM)")
-    lunch_time = st.text_input(" ", value='12:00')
-    st.text("Return from Lunch Time (HH:MM)")
-    return_from_lunch_time = st.text_input(" ", value='13:30')
+def main():
+    st.sidebar.title("Navigation")
+    selected_page = st.sidebar.radio("Go to", options=["Register", "Login", "Calculate"])
 
-    if st.button("Calculate"):
-        duration_str, exit_time_str = calculate_exit_time(enter_time, lunch_time, return_from_lunch_time)
-        st.write(duration_str)
-        st.write(exit_time_str)
+    if selected_page == "Register":
+        register_page.run_register_page()
 
+    elif selected_page == "Login":
+        st.session_state.username = login_page.run_login_page()
+
+    elif selected_page == "Calculate":
+        # Verifica se há um nome de usuário armazenado na sessão
+        if st.session_state.username:
+            calculate_page.run_calculate_page(st.session_state.username)
+        else:
+            st.error("Please login first to access this page.")
+
+    if st.session_state.get("logged_in", False):
+        st.sidebar.write(f"Logged in as: {st.session_state.username}")
+        
 if __name__ == "__main__":
-    run_frontend()
+    main()

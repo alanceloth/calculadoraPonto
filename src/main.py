@@ -1,5 +1,5 @@
 import streamlit as st
-from frontend import run_frontend
+from frontend import main
 
 if __name__ == "__main__":
-    run_frontend()
+    main()
