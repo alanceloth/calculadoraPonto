@@ -32,16 +32,20 @@ def send_calendar_event(email, exit_time):
     # Autentica e autoriza a aplicação
     service = authenticate_google_calendar()
 
+    # Adiciona a data atual ao exit_time e converte para o formato necessário (YYYY-MM-DDTHH:MM:SS.MMMZ)
+    current_date = datetime.now().strftime('%Y-%m-%d')
+    formatted_exit_time = f"{current_date}T{exit_time}:00.000Z"  # Adiciona segundos e milissegundos e inclui o Z para indicar UTC
+
     # Define o corpo do evento
     event = {
         'summary': 'Exit Time',
         'description': 'Time to leave work',
         'start': {
-            'dateTime': exit_time,
+            'dateTime': formatted_exit_time,
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
         'end': {
-            'dateTime': (datetime.strptime(exit_time, '%H:%M') + timedelta(hours=1)).strftime('%H:%M'),  # Adiciona uma hora ao tempo de saída e formata como HH:MM
+            'dateTime': (datetime.strptime(exit_time, '%H:%M') + timedelta(hours=1)).strftime('%H:%M') + ':00.000Z',  # Adiciona uma hora ao tempo de saída e formata como HH:MM:SS.MMMZ
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
     }
@@ -50,6 +54,8 @@ def send_calendar_event(email, exit_time):
     calendar_id = 'primary'  # ID do calendário padrão do usuário
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     print('Event created: %s' % (event.get('htmlLink')))
+
+
 
 
 # Função para enviar um e-mail ao usuário
