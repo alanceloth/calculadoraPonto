@@ -44,7 +44,7 @@ def send_calendar_event(email, exit_time):
     # Autentica e autoriza a aplicação
     service = authenticate_google_calendar()
 
-    exit_time = convert_exit_time(exit_time)
+    #exit_time = convert_exit_time(exit_time)
     # Define o corpo do evento
     event = {
         'summary': 'Exit Time',
@@ -92,7 +92,7 @@ def run_calculate_page(username, user_email):
         save_record(username, record)
 
         # Enviar evento para o calendário
-        exit_time_str = convert_exit_time(exit_time_str)
+        #exit_time_str = convert_exit_time(exit_time_str)
         send_calendar_event(user_email, exit_time_str)
 
         # Enviar e-mail ao usuário
