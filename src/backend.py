@@ -22,8 +22,9 @@ def calculate_exit_time(enter_time: str, lunch_time: str, return_from_lunch_time
     # Format and return the results
     duration_str = f"Your total lunch duration was: {lunch_duration}"
     exit_time_str = f"You can clock out at: {exit_time.strftime('%H:%M')}"
+    exit_time_clock = exit_time.strftime('%H:%M')
 
-    return duration_str, exit_time_str
+    return duration_str, exit_time_str, exit_time_clock
 
 # Function to create a new user in the database
 def create_new_user(username, email, password):

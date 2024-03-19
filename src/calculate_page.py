@@ -13,18 +13,6 @@ from datetime import datetime, timedelta
 # Defina as permissões necessárias para acessar o calendário do usuário
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
-def convert_exit_time(exit_time):
-    # Obtém a data atual
-    current_date = datetime.now().date()
-    # Formata a hora de saída no formato HH:MM
-    exit_time_formatted = datetime.strptime(exit_time, '%H:%M')
-    # Combina a data atual com a hora de saída formatada
-    exit_time_combined = datetime.combine(current_date, exit_time_formatted.time())
-    return exit_time_combined.strftime('%Y-%m-%dT%H:%M:%S')
-
-
-
-
 def authenticate_google_calendar():
     creds = None
     if os.path.exists('token.pickle'):
@@ -82,7 +70,7 @@ def run_calculate_page(username, user_email):
     return_from_lunch_time = st.text_input(" ", value='13:30')
 
     if st.button("Calculate"):
-        duration_str, exit_time_str = calculate_exit_time(enter_time, lunch_time, return_from_lunch_time)
+        duration_str, exit_time_str, exit_time_clock = calculate_exit_time(enter_time, lunch_time, return_from_lunch_time)
         st.write(duration_str)
         st.write(exit_time_str)
 
@@ -91,8 +79,7 @@ def run_calculate_page(username, user_email):
         save_record(username, record)
 
         # Enviar evento para o calendário
-        #exit_time_str = convert_exit_time(exit_time_str)
-        send_calendar_event(user_email, exit_time_str)
+        send_calendar_event(user_email, exit_time_clock)
 
         # Enviar e-mail ao usuário
         #send_email(user_email, exit_time_str)
