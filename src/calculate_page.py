@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from google.oauth2.service_account import Credentials
 import os.path
 import pickle
 
@@ -12,25 +13,22 @@ import pickle
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 
-def send_calendar_event(email, exit_time):
-    # Função para autenticar e autorizar a aplicação
-    def authenticate_google_calendar():
-        creds = None
-        if os.path.exists('token.pickle'):
-            with open('token.pickle', 'rb') as token:
-                creds = pickle.load(token)
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                # Modificado para acessar as variáveis de ambiente definidas no TOML
-                flow = InstalledAppFlow.from_client_config(
-                    st.secrets["google_calendar"]['var'], SCOPES)
-                creds = flow.run_local_server(port=0)
-            with open('token.pickle', 'wb') as token:
-                pickle.dump(creds, token)
-        return build('calendar', 'v3', credentials=creds)
+def authenticate_google_calendar():
+    creds = None
+    if os.path.exists('token.pickle'):
+        with open('token.pickle', 'rb') as token:
+            creds = pickle.load(token)
+    if not creds or not creds.valid:
+        if creds and creds.expired and creds.refresh_token:
+            creds.refresh(Request())
+        else:
+            # Modificado para carregar as credenciais da conta de serviço do TOML
+            service_account_info = st.secrets["google_calendar"]
+            creds = Credentials.from_service_account_file(
+                service_account_info['client_secret_file'], scopes=SCOPES)
+    return build('calendar', 'v3', credentials=creds)
 
+def send_calendar_event(email, exit_time):
     # Autentica e autoriza a aplicação
     service = authenticate_google_calendar()
 
