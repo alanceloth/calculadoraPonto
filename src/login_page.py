@@ -7,7 +7,6 @@ def run_login_page() -> str:
 
     st.header("Login")
     username = st.text_input("Username:")
-    email = st.text_input("Email:")
     password = st.text_input("Password:", type="password")
     if st.button("Login"):
         if authenticate_user(username, password):
