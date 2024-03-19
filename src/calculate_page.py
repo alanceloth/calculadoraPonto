@@ -7,10 +7,22 @@ from google.auth.transport.requests import Request
 from google.oauth2.service_account import Credentials
 import os.path
 import pickle
+from datetime import datetime, timedelta
 
 
 # Defina as permissões necessárias para acessar o calendário do usuário
 SCOPES = ['https://www.googleapis.com/auth/calendar']
+
+def convert_exit_time(exit_time):
+    # Obtém a data atual
+    current_date = datetime.now().date()
+    # Formata a hora de saída no formato HH:MM
+    exit_time_formatted = datetime.strptime(exit_time, '%H:%M')
+    # Combina a data atual com a hora de saída formatada
+    exit_time_combined = datetime.combine(current_date, exit_time_formatted.time())
+    return exit_time_combined.strftime('%Y-%m-%dT%H:%M:%S')
+
+
 
 
 def authenticate_google_calendar():
@@ -32,6 +44,7 @@ def send_calendar_event(email, exit_time):
     # Autentica e autoriza a aplicação
     service = authenticate_google_calendar()
 
+    exit_time = convert_exit_time(exit_time)
     # Define o corpo do evento
     event = {
         'summary': 'Exit Time',
@@ -79,6 +92,7 @@ def run_calculate_page(username, user_email):
         save_record(username, record)
 
         # Enviar evento para o calendário
+        exit_time_str = convert_exit_time(exit_time_str)
         send_calendar_event(user_email, exit_time_str)
 
         # Enviar e-mail ao usuário
