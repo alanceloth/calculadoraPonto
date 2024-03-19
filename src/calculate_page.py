@@ -36,25 +36,24 @@ def send_calendar_event(username, exit_time):
     # Adiciona a data atual ao exit_time e converte para o formato necessário (YYYY-MM-DDTHH:MM:SS.MMMZ)
     current_date = datetime.now().strftime('%Y-%m-%d')
     formatted_exit_time = f"{current_date}T{exit_time}:00.000Z"  # Adiciona segundos e milissegundos e inclui o Z para indicar UTC
+    exit_time_with_timezone = (datetime.strptime(formatted_exit_time, '%Y-%m-%dT%H:%M:%S.%fZ') + timedelta(hours=3)).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
 
     # Define o corpo do evento
     event = {
         'summary': 'Exit Time',
         'description': 'Time to leave work',
         'start': {
-            'dateTime': formatted_exit_time,
+            'dateTime': exit_time_with_timezone,
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
         'end': {
-            'dateTime': (datetime.strptime(formatted_exit_time, '%Y-%m-%dT%H:%M:%S.000Z') + timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
+            'dateTime': (datetime.strptime(exit_time_with_timezone, '%Y-%m-%dT%H:%M:%S.000Z') + timedelta(minutes=5)).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
     }
 
     # Insere o evento no calendário do usuário
     calendar_id = get_user_calendar_id(username)  # ID do calendário padrão do usuário
-    if '%' in calendar_id:
-        calendar_id = unquote(calendar_id)
 
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     os.write(1, f'Event created: {event.get("htmlLink")}\n'.encode())
