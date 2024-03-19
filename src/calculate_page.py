@@ -36,7 +36,7 @@ def send_calendar_event(username, exit_time):
     # Adiciona a data atual ao exit_time e converte para o formato necessário (YYYY-MM-DDTHH:MM:SS.MMMZ)
     current_date = datetime.now().strftime('%Y-%m-%d')
     formatted_exit_time = f"{current_date}T{exit_time}:00.000Z"  # Adiciona segundos e milissegundos e inclui o Z para indicar UTC
-    exit_time_with_timezone = (datetime.strptime(formatted_exit_time, '%Y-%m-%dT%H:%M:%S.%fZ') + timedelta(hours=3)).strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    exit_time_with_timezone = (datetime.strptime(formatted_exit_time, '%Y-%m-%dT%H:%M:%S.000Z') + timedelta(hours=3)).strftime('%Y-%m-%dT%H:%M:%S.000Z')
 
     # Define o corpo do evento
     event = {
