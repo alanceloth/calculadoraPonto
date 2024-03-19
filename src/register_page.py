@@ -23,3 +23,14 @@ def run_register_page():
             create_new_user(new_username, new_email, new_calendar_id, new_password)
             st.success("New user registered successfully!")
             return new_username  # Return the registered username
+        
+    st.text("Tutorial to register new user:")
+    st.markdown("1. [Go To](https://calendar.google.com/)")
+    st.markdown("2. On the left, next to Other calendars, click Add other calendars")
+    st.markdown("3. Add a name and description for your calendar.")
+    st.markdown("4. Click Create calendar.")
+    st.markdown("5. Click Settings in this calendar.")
+    st.markdown("6. Click share with specific people.")
+    st.markdown("7. Add this email calculadora-calendario@calculadora-ponto.iam.gserviceaccount.com with writing privileges.")
+    st.markdown("8. Copy the calendar ID below the integration area.")
+    st.markdown("9. Use the calendar ID in the register form above.")
