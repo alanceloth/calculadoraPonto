@@ -8,6 +8,7 @@ from google.oauth2.service_account import Credentials
 import os.path
 import pickle
 from datetime import datetime, timedelta
+from urllib.parse import unquote
 
 
 # Defina as permissões necessárias para acessar o calendário do usuário
@@ -52,8 +53,10 @@ def send_calendar_event(username, exit_time):
 
     # Insere o evento no calendário do usuário
     calendar_id = get_user_calendar_id(username)  # ID do calendário padrão do usuário
-    os.write(1, calendar_id.encode())
-    event = service.events().insert(calendarId=calendar_id.encode(), body=event).execute()
+    if '%' in calendar_id:
+        calendar_id = unquote(calendar_id)
+
+    event = service.events().insert(calendarId=calendar_id, body=event).execute()
     os.write(1, f'Event created: {event.get("htmlLink")}\n'.encode())
 
 
