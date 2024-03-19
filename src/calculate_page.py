@@ -1,5 +1,5 @@
 import streamlit as st
-from backend import calculate_exit_time, save_record, get_user_records, delete_record
+from backend import calculate_exit_time, save_record, get_user_calendar_id, delete_record
 from datetime import datetime, timedelta
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -28,7 +28,7 @@ def authenticate_google_calendar():
                 service_account_info, scopes=SCOPES)
     return build('calendar', 'v3', credentials=creds)
 
-def send_calendar_event(email, exit_time):
+def send_calendar_event(username, exit_time):
     # Autentica e autoriza a aplicação
     service = authenticate_google_calendar()
 
@@ -51,7 +51,7 @@ def send_calendar_event(email, exit_time):
     }
 
     # Insere o evento no calendário do usuário
-    calendar_id = 'primary'  # ID do calendário padrão do usuário
+    calendar_id = get_user_calendar_id(username)  # ID do calendário padrão do usuário
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
     os.write(1, f'Event created: {event.get("htmlLink")}\n'.encode())
 
@@ -85,7 +85,7 @@ def run_calculate_page(username, user_email):
         save_record(username, record)
 
         # Enviar evento para o calendário
-        send_calendar_event(user_email, exit_time_clock)
+        send_calendar_event(username, exit_time_clock)
 
         # Enviar e-mail ao usuário
         #send_email(user_email, exit_time_str)

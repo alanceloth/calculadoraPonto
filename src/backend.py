@@ -27,7 +27,7 @@ def calculate_exit_time(enter_time: str, lunch_time: str, return_from_lunch_time
     return duration_str, exit_time_str, exit_time_clock
 
 # Function to create a new user in the database
-def create_new_user(username, email, password):
+def create_new_user(username, email, calendar_id, password):
     """
     Create a new user in the database.
 
@@ -41,7 +41,7 @@ def create_new_user(username, email, password):
     c = conn.cursor()
 
     # Insert the new user into the database
-    c.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', (username, email, password))
+    c.execute('INSERT INTO users (username, email, calendar_id, password) VALUES (?, ?, ?, ?)', (username, email, calendar_id, password))
 
     # Commit the changes and close the database connection
     conn.commit()
@@ -73,7 +73,31 @@ def get_user_email(username):
     else:
         return None  # Return None if the user is not found
     
-    
+
+def get_user_calendar_id(username):
+    """
+    Retrieve the email of a user from the database.
+
+    Parameters:
+    - username (str): The username of the user.
+
+    Returns:
+    - calendar_id (str): The calendar_id of the user if found, otherwise None.
+    """
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+
+    # Retrieve the calendar_id of the user with the provided username
+    c.execute('SELECT calendar_id FROM users WHERE username=?', (username,))
+    result = c.fetchone()
+
+    conn.close()
+
+    if result:
+        return result[0]  # Return the email if found
+    else:
+        return None  # Return None if the user is not found
+
 # Function to authenticate the user in the database
 def authenticate_user(username, password):
     """
