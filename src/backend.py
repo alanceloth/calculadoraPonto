@@ -94,7 +94,7 @@ def get_user_calendar_id(username):
     conn.close()
 
     if result:
-        return result[0]  # Return the email if found
+        return result[0]  # Return the calendar_id if found
     else:
         return None  # Return None if the user is not found
 
