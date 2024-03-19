@@ -45,7 +45,7 @@ def send_calendar_event(email, exit_time):
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
         'end': {
-            'dateTime': (datetime.strptime(formatted_exit_time, '%Y-%m-%dT%H:%M:%S') + timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
+            'dateTime': (datetime.strptime(formatted_exit_time, '%Y-%m-%dT%H:%M:%S.000Z') + timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S.000Z'),
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
     }
