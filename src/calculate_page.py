@@ -44,7 +44,6 @@ def send_calendar_event(email, exit_time):
     # Autentica e autoriza a aplicação
     service = authenticate_google_calendar()
 
-    #exit_time = convert_exit_time(exit_time)
     # Define o corpo do evento
     event = {
         'summary': 'Exit Time',
@@ -54,7 +53,7 @@ def send_calendar_event(email, exit_time):
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
         'end': {
-            'dateTime': (datetime.strptime(exit_time, '%Y-%m-%dT%H:%M:%S') + timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S'),  # Adiciona uma hora ao tempo de saída
+            'dateTime': (datetime.strptime(exit_time, '%H:%M') + timedelta(hours=1)).strftime('%H:%M'),  # Adiciona uma hora ao tempo de saída e formata como HH:MM
             'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
         },
     }
