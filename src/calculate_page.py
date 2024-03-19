@@ -22,10 +22,10 @@ def authenticate_google_calendar():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            # Modificado para carregar as credenciais da conta de serviço do TOML
+            # Modificado para carregar as credenciais da conta de serviço do Streamlit Cloud Secrets
             service_account_info = st.secrets["google_calendar"]
-            creds = Credentials.from_service_account_file(
-                service_account_info['client_secret_file'], scopes=SCOPES)
+            creds = Credentials.from_service_account_info(
+                service_account_info, scopes=SCOPES)
     return build('calendar', 'v3', credentials=creds)
 
 def send_calendar_event(email, exit_time):
