@@ -15,19 +15,16 @@ def send_calendar_event(email, exit_time):
     # Função para autenticar e autorizar a aplicação
     def authenticate_google_calendar():
         creds = None
-        # O arquivo token.pickle armazena as credenciais do usuário e é criado automaticamente quando a autorização é concluída pela primeira vez
         if os.path.exists('token.pickle'):
             with open('token.pickle', 'rb') as token:
                 creds = pickle.load(token)
-        # Se não houver credenciais válidas disponíveis, solicita que o usuário faça login
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    'credentials.json', SCOPES)
+                    os.getenv('GOOGLE_CLIENT_SECRETS_FILE'), ['https://www.googleapis.com/auth/calendar.events'])
                 creds = flow.run_local_server(port=0)
-            # Salva as credenciais para a próxima execução
             with open('token.pickle', 'wb') as token:
                 pickle.dump(creds, token)
         return build('calendar', 'v3', credentials=creds)
