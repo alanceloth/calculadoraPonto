@@ -26,12 +26,13 @@ def calculate_exit_time(enter_time: str, lunch_time: str, return_from_lunch_time
     return duration_str, exit_time_str
 
 # Function to create a new user in the database
-def create_new_user(username, password):
+def create_new_user(username, email, password):
     """
     Create a new user in the database.
 
     Parameters:
     - username (str): The username of the new user.
+    - email (str): The email of the new user.
     - password (str): The password of the new user.
     """
     # Connect to the database (assuming you have a SQLite database file named 'users.db')
@@ -39,7 +40,7 @@ def create_new_user(username, password):
     c = conn.cursor()
 
     # Insert the new user into the database
-    c.execute('INSERT INTO users (username, password) VALUES (?, ?)', (username, password))
+    c.execute('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', (username, email, password))
 
     # Commit the changes and close the database connection
     conn.commit()
