@@ -53,7 +53,7 @@ def send_calendar_event(email, exit_time):
     # Insere o evento no calendário do usuário
     calendar_id = 'primary'  # ID do calendário padrão do usuário
     event = service.events().insert(calendarId=calendar_id, body=event).execute()
-    print('Event created: %s' % (event.get('htmlLink')))
+    os.write('Event created: %s' % (event.get('htmlLink')))
 
 
 
