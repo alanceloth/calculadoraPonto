@@ -23,7 +23,7 @@ def authenticate_google_calendar():
             creds.refresh(Request())
         else:
             # Modificado para carregar as credenciais da conta de serviço do Streamlit Cloud Secrets
-            service_account_info = st.secrets["google_calendar"]
+            service_account_info = st.secrets["google_calendar"]['var']
             creds = Credentials.from_service_account_info(
                 service_account_info, scopes=SCOPES)
     return build('calendar', 'v3', credentials=creds)
