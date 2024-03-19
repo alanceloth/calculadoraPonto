@@ -21,7 +21,7 @@ def main():
     elif selected_page == "Calculate":
         # Verifica se há um nome de usuário armazenado na sessão
         if st.session_state.username:
-            calculate_page.run_calculate_page(st.session_state.username)
+            calculate_page.run_calculate_page(st.session_state.username, st.session_state.email)
         else:
             st.error("Please login first to access this page.")
 
