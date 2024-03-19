@@ -4,8 +4,9 @@ import login_page
 import calculate_page
 from dba import create_database
 
-# Inicializando a variável username na sessão
+# Inicializando a variável username e email na sessão
 st.session_state.username = None
+st.session_state.email = None
 
 def main():
     create_database()
@@ -16,7 +17,7 @@ def main():
         register_page.run_register_page()
 
     elif selected_page == "Login":
-        st.session_state.username = login_page.run_login_page()
+        st.session_state.username, st.session_state.email = login_page.run_login_page()
 
     elif selected_page == "Calculate":
         # Verifica se há um nome de usuário armazenado na sessão

@@ -46,6 +46,33 @@ def create_new_user(username, email, password):
     conn.commit()
     conn.close()
 
+
+# Function to get the user's email from the database
+def get_user_email(username):
+    """
+    Retrieve the email of a user from the database.
+
+    Parameters:
+    - username (str): The username of the user.
+
+    Returns:
+    - email (str): The email of the user if found, otherwise None.
+    """
+    conn = sqlite3.connect('users.db')
+    c = conn.cursor()
+
+    # Retrieve the email of the user with the provided username
+    c.execute('SELECT email FROM users WHERE username=?', (username,))
+    result = c.fetchone()
+
+    conn.close()
+
+    if result:
+        return result[0]  # Return the email if found
+    else:
+        return None  # Return None if the user is not found
+    
+    
 # Function to authenticate the user in the database
 def authenticate_user(username, password):
     """
