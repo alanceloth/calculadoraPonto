@@ -1,7 +1,66 @@
 import streamlit as st
 from backend import calculate_exit_time, save_record, get_user_records, delete_record
+from datetime import datetime, timedelta
+from googleapiclient.discovery import build
+from google_auth_oauthlib.flow import InstalledAppFlow
+from google.auth.transport.requests import Request
+import os.path
+import pickle
 
-def run_calculate_page(username):
+
+# Defina as permissões necessárias para acessar o calendário do usuário
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+
+def send_calendar_event(email, exit_time):
+    # Função para autenticar e autorizar a aplicação
+    def authenticate_google_calendar():
+        creds = None
+        # O arquivo token.pickle armazena as credenciais do usuário e é criado automaticamente quando a autorização é concluída pela primeira vez
+        if os.path.exists('token.pickle'):
+            with open('token.pickle', 'rb') as token:
+                creds = pickle.load(token)
+        # Se não houver credenciais válidas disponíveis, solicita que o usuário faça login
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Salva as credenciais para a próxima execução
+            with open('token.pickle', 'wb') as token:
+                pickle.dump(creds, token)
+        return build('calendar', 'v3', credentials=creds)
+
+    # Autentica e autoriza a aplicação
+    service = authenticate_google_calendar()
+
+    # Define o corpo do evento
+    event = {
+        'summary': 'Exit Time',
+        'description': 'Time to leave work',
+        'start': {
+            'dateTime': exit_time,
+            'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
+        },
+        'end': {
+            'dateTime': (datetime.strptime(exit_time, '%Y-%m-%dT%H:%M:%S') + timedelta(hours=1)).strftime('%Y-%m-%dT%H:%M:%S'),  # Adiciona uma hora ao tempo de saída
+            'timeZone': 'America/Sao_Paulo',  # Substitua pela timezone do usuário, se necessário
+        },
+    }
+
+    # Insere o evento no calendário do usuário
+    calendar_id = 'primary'  # ID do calendário padrão do usuário
+    event = service.events().insert(calendarId=calendar_id, body=event).execute()
+    print('Event created: %s' % (event.get('htmlLink')))
+
+
+# Função para enviar um e-mail ao usuário
+def send_email(email, exit_time):
+    # Lógica para enviar um e-mail ao usuário com o horário de saída
+    pass
+
+def run_calculate_page(username, user_email):
     st.title("Calculate Page")
     st.sidebar.write(f"Logged in as: {st.session_state.username}")
 
@@ -21,6 +80,12 @@ def run_calculate_page(username):
         # Save the user's record in the database
         record = f"Enter Time: {enter_time}, Lunch Time: {lunch_time}, Return from Lunch Time: {return_from_lunch_time}, Exit Time: {exit_time_str}"
         save_record(username, record)
+
+        # Enviar evento para o calendário
+        send_calendar_event(user_email, exit_time_str)
+
+        # Enviar e-mail ao usuário
+        #send_email(user_email, exit_time_str)
 
     # # Display user's record history
     # if st.button("Show History"):
