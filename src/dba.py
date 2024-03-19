@@ -11,6 +11,7 @@ def create_database():
                     id INTEGER PRIMARY KEY,
                     username TEXT NOT NULL UNIQUE,
                     email TEXT NOT NULL,
+                    calendar_id TEXT NOT NULL,
                     password TEXT NOT NULL
                 )''')
 
