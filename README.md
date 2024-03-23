@@ -1,4 +1,32 @@
 
+# Project Overview
+
+![Calculadora Ponto Architeture](docs/images/architeture.png)
+
+## Project Description
+
+**Title**: Work Hours Calculator
+
+**Overview**:
+The Work Hours Calculator project aims to streamline the process of determining optimal work hours by calculating entry and exit times based on an 8-hour workday. Initially developed as a personal tool in Jupyter Notebook, the project has evolved to serve a wider audience by providing a user-friendly interface through Streamlit.
+
+**Motivation**:
+The inspiration behind this project stemmed from the need to efficiently manage work hours while ensuring a healthy work-life balance. Recognizing the potential benefit to colleagues who also sought similar solutions, the decision was made to refactor the code and create a more accessible tool.
+
+**Features**:
+- **Calculation of Work Hours**: The core functionality of the project involves computing entry and exit times to meet the desired 8-hour workday.
+- **Streamlit Interface**: The introduction of a Streamlit interface simplifies user interaction, making it easier for colleagues to utilize the tool.
+- **Deployment on Render.com**: The project has been deployed as a web service on Render.com, utilizing Docker for containerization.
+- **Future Enhancements**:
+  - **Database Integration**: Incorporate and integrate a PostgreSQL database to persist user data. Currently, the project utilizes a SQLite database, which resets with each deployment.
+  - **Docker Compose**: Implement Docker Compose to manage two separate containers (application and PostgreSQL), providing a more robust and scalable deployment solution.
+
+**Conclusion**:
+The Work Hours Calculator project, while initially conceived as a personal endeavor, has evolved into a collaborative tool aimed at enhancing productivity and work-life balance for users. With plans for future enhancements, including database integration and containerization with Docker Compose, the project demonstrates potential for continued development and improvement.
+
+
+-------------------------------------------------------
+
 Welcome to my calculadora ponto repo.
 
 To use this project structure you will need to follow the steps below.
