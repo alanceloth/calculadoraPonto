@@ -5,7 +5,7 @@ FROM python:3.11.5-slim
 WORKDIR /app
 
 # Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python -
+RUN pip install poetry
 
 # Allow installing as root
 ENV POETRY_VIRTUALENVS_CREATE=false
